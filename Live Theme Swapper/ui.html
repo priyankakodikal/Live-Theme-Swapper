@@ -1,0 +1,125 @@
+<!-- ui.html -->
+<style>
+    body {
+      font-family: Inter, sans-serif;
+      padding: 20px;
+    }
+    
+    h2 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+    }
+    
+    p {
+      margin: 0 0 16px 0;
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    .theme-button {
+      border: none;
+      border-radius: 6px;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    
+    .theme-button:hover {
+      transform: translateY(-2px);
+    }
+    
+    .color-preview {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+    
+    .color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    /* Theme-specific styles */
+    .light-theme {
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    
+    .dark-theme {
+      background-color: #333;
+      color: white;
+    }
+    
+    .sunset-theme {
+      background-color: #fff1e6;
+      color: #7c2d12;
+    }
+    
+    .forest-theme {
+      background-color: #ecfdf5;
+      color: #064e3b;
+    }
+  </style>
+  
+  <h2>Theme Switcher</h2>
+  <p>Select a frame and choose a theme to create a themed copy.</p>
+  
+  <div class="theme-grid">
+    <button class="theme-button light-theme" data-theme="light">
+      <div class="color-preview">
+        <div class="color-dot" style="background-color: rgb(51, 102, 204)"></div>
+        <div class="color-dot" style="background-color: rgb(153, 51, 179)"></div>
+      </div>
+      Light Theme
+    </button>
+    
+    <button class="theme-button dark-theme" data-theme="dark">
+      <div class="color-preview">
+        <div class="color-dot" style="background-color: rgb(102, 153, 255)"></div>
+        <div class="color-dot" style="background-color: rgb(204, 102, 230)"></div>
+      </div>
+      Dark Theme
+    </button>
+    
+    <button class="theme-button sunset-theme" data-theme="sunset">
+      <div class="color-preview">
+        <div class="color-dot" style="background-color: rgb(242, 102, 51)"></div>
+        <div class="color-dot" style="background-color: rgb(230, 153, 26)"></div>
+      </div>
+      Sunset Theme
+    </button>
+    
+    <button class="theme-button forest-theme" data-theme="forest">
+      <div class="color-preview">
+        <div class="color-dot" style="background-color: rgb(51, 128, 77)"></div>
+        <div class="color-dot" style="background-color: rgb(77, 153, 51)"></div>
+      </div>
+      Forest Theme
+    </button>
+  </div>
+  
+  <script>
+  document.querySelectorAll('.theme-button').forEach(button => {
+    button.onclick = () => {
+      const themeName = button.getAttribute('data-theme');
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'apply-theme',
+          themeName: themeName
+        }
+      }, '*');
+    };
+  });
+  </script>
