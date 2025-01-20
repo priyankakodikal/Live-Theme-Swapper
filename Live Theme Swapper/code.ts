@@ -1,11 +1,12 @@
 // code.ts
-type ColorStyle = {
-  name: string;
-  color: string; // Change to string to accommodate HEX values
+interface RGB {
+  readonly r: number;
+  readonly g: number;
+  readonly b: number;
 }
 
-type ThemeColors = {
-  [key: string]: string; // Change to string to accommodate HEX values
+interface ThemeColors {
+  [key: string]: RGB;
 }
 
 interface Themes {
@@ -15,46 +16,41 @@ interface Themes {
 // Define multiple themes
 const themes: Themes = {
   light: {
-    'primary': '#3366CC',
-    'secondary': '#993399',
-    'background': '#FFFFFF',
-    'text': '#1A1A1A'
+    'primary': { r: 0.2, g: 0.4, b: 0.8 },
+    'secondary': { r: 0.6, g: 0.2, b: 0.7 },
+    'background': { r: 1, g: 1, b: 1 },
+    'text': { r: 0.1, g: 0.1, b: 0.1 }
   },
   dark: {
-    'primary': '#6699FF',
-    'secondary': '#CC66E5',
-    'background': '#1A1A1A',
-    'text': '#E5E5E5'
+    'primary': { r: 0.4, g: 0.6, b: 1 },
+    'secondary': { r: 0.8, g: 0.4, b: 0.9 },
+    'background': { r: 0.1, g: 0.1, b: 0.1 },
+    'text': { r: 0.9, g: 0.9, b: 0.9 }
   },
   sunset: {
-    'primary': '#F26633',
-    'secondary': '#E59919',
-    'background': '#FAF2E6',
-    'text': '#4D1A1A'
+    'primary': { r: 0.95, g: 0.4, b: 0.2 },
+    'secondary': { r: 0.9, g: 0.6, b: 0.1 },
+    'background': { r: 0.98, g: 0.95, b: 0.9 },
+    'text': { r: 0.3, g: 0.1, b: 0.1 }
   },
   forest: {
-    'primary': '#33994D',
-    'secondary': '#4D9933',
-    'background': '#F2FAF2',
-    'text': '#1A331A'
+    'primary': { r: 0.2, g: 0.5, b: 0.3 },
+    'secondary': { r: 0.3, g: 0.6, b: 0.2 },
+    'background': { r: 0.95, g: 0.98, b: 0.95 },
+    'text': { r: 0.1, g: 0.2, b: 0.1 }
   }
 };
 
-// Function to extract color name from style name
 function getColorName(styleName: string): string {
-  // Assuming style names are in format "Theme/ColorName"
   const parts = styleName.split('/');
   return parts[parts.length - 1].toLowerCase();
 }
 
-// Function to get theme colors based on color name
-function getThemeColor(colorName: string, theme: ThemeColors): string | null {
+function getThemeColor(colorName: string, theme: ThemeColors): RGB | null {
   return theme[colorName.toLowerCase()] || null;
 }
 
-// Function to process node and its children recursively
 async function processNode(node: SceneNode, theme: ThemeColors): Promise<void> {
-  // Handle fills
   if ('fills' in node && node.fills) {
     const fills = node.fills as Paint[];
     fills.forEach((fill, index) => {
@@ -64,14 +60,17 @@ async function processNode(node: SceneNode, theme: ThemeColors): Promise<void> {
           const colorName = getColorName(style.name);
           const themeColor = getThemeColor(colorName, theme);
           if (themeColor) {
-            fills[index] = { ...fill, color: hexToRgb(themeColor) } as SolidPaint;
+            const newFill: SolidPaint = {
+              ...fill,
+              color: themeColor
+            };
+            fills[index] = newFill;
           }
         }
       }
     });
   }
 
-  // Handle strokes
   if ('strokes' in node && node.strokes) {
     const strokes = node.strokes as Paint[];
     strokes.forEach((stroke, index) => {
@@ -81,14 +80,17 @@ async function processNode(node: SceneNode, theme: ThemeColors): Promise<void> {
           const colorName = getColorName(style.name);
           const themeColor = getThemeColor(colorName, theme);
           if (themeColor) {
-            strokes[index] = { ...stroke, color: hexToRgb(themeColor) } as SolidPaint;
+            const newStroke: SolidPaint = {
+              ...stroke,
+              color: themeColor
+            };
+            strokes[index] = newStroke;
           }
         }
       }
     });
   }
 
-  // Process children recursively
   if ('children' in node) {
     for (const child of node.children) {
       await processNode(child, theme);
@@ -96,44 +98,35 @@ async function processNode(node: SceneNode, theme: ThemeColors): Promise<void> {
   }
 }
 
-// Helper function to convert HEX to RGB
-function hexToRgb(hex: string): RGB {
-  const bigint = parseInt(hex.slice(1), 16);
-  const r = (bigint >> 16) & 255;
-  const g = (bigint >> 8) & 255;
-  const b = bigint & 255;
-  return { r: r / 255, g: g / 255, b: b / 255 };
-}
-
-// Main plugin code
-figma.showUI(__html__, { width: 300, height: 600 });
+figma.showUI(__html__, { width: 300, height: 400 });
 
 figma.ui.onmessage = async (msg) => {
-  if (msg.type === 'theme-switch') {
+  if (msg.type === 'apply-theme') {
     const selectedNodes = figma.currentPage.selection;
+    const selectedTheme = themes[msg.themeName];
     
     if (selectedNodes.length === 0) {
       figma.notify('Please select a frame to apply the theme');
       return;
     }
 
-    // Process each selected node
-    for (const node of selectedNodes) {
-      if (node.type === 'FRAME') {
-        // Clone the frame and its contents
-        const clonedFrame = node.clone();
-        
-        // Position the cloned frame next to the original
-        clonedFrame.x = node.x + node.width + 100;
-        
-        // Apply the new theme
-        await processNode(clonedFrame, themes.dark); // You can switch between themes.light, themes.dark, etc.
-        
-        // Select the new frame
-        figma.currentPage.selection = [clonedFrame];
-      }
+    if (!selectedTheme) {
+      figma.notify('Invalid theme selected');
+      return;
     }
-    
-    figma.notify('Theme applied successfully!');
+
+    try {
+      for (const node of selectedNodes) {
+        if (node.type === 'FRAME') {
+          const clonedFrame = node.clone();
+          clonedFrame.x = node.x + node.width + 100;
+          await processNode(clonedFrame, selectedTheme);
+          figma.currentPage.selection = [clonedFrame];
+        }
+      }
+      figma.notify(`${msg.themeName} theme applied successfully!`);
+    } catch (error) {
+      figma.notify('Error applying theme: ' + (error as Error).message);
+    }
   }
 };
