@@ -13,28 +13,35 @@ interface State {
   [key: string]: ThemeColors;
 }
 
+interface Text {
+  [key: string]: ThemeColors;
+}
+
 // Define multiple themes using hex values
-const themes: State = {
+const themes: State & Text = {
   light: {
     'Alert (Alert)': '#3366CC',
     'Freeze Layer (FreezeColor)': '#9933B3',
-    'Scale Awareness (ScaleAwareness)': '#FFFFFF'
+    'Scale Awareness (ScaleAwareness)': '#FFFFFF',
+    'View Text (ControlForeground)': '#6699FF'
   },
   dark: {
     'Alert (Alert)': '#6699FF',
     'Freeze Layer (FreezeColor)': '#CC66E6',
-    'Scale Awareness (ScaleAwareness)': '#1A1A1A'
+    'Scale Awareness (ScaleAwareness)': '#1A1A1A',
+    'View Text (ControlForeground)': '#9933B3'
   },
   sunset: {
     'Alert (Alert)': '#F26633',
     'Freeze Layer (FreezeColor)': '#E6991A',
-    'Scale Awareness (ScaleAwareness)': '#FAF2E6'
+    'Scale Awareness (ScaleAwareness)': '#FAF2E6',
+    'View Text (ControlForeground)': '#4D9933'
   },
   forest: {
     'Alert (Alert)': '#33804D',
     'Freeze Layer (FreezeColor)': '#4D9933',
-    'Scale Awareness (ScaleAwareness)': '#F2FAF2'
-  }
+    'Scale Awareness (ScaleAwareness)': '#E6991A'
+  },
 };
 
 // Convert hex to RGB
