@@ -9,35 +9,31 @@ interface ThemeColors {
   [key: string]: string; // Hex values
 }
 
-interface Themes {
+interface State {
   [key: string]: ThemeColors;
 }
 
 // Define multiple themes using hex values
-const themes: Themes = {
+const themes: State = {
   light: {
-    'primary': '#3366CC',
-    'secondary': '#9933B3',
-    'background': '#FFFFFF',
-    'text': '#1A1A1A'
+    'Alert (Alert)': '#3366CC',
+    'Freeze Layer (FreezeColor)': '#9933B3',
+    'Scale Awareness (ScaleAwareness)': '#FFFFFF'
   },
   dark: {
-    'primary': '#6699FF',
-    'secondary': '#CC66E6',
-    'background': '#1A1A1A',
-    'text': '#E6E6E6'
+    'Alert (Alert)': '#6699FF',
+    'Freeze Layer (FreezeColor)': '#CC66E6',
+    'Scale Awareness (ScaleAwareness)': '#1A1A1A'
   },
   sunset: {
-    'primary': '#F26633',
-    'secondary': '#E6991A',
-    'background': '#FAF2E6',
-    'text': '#4D1A1A'
+    'Alert (Alert)': '#F26633',
+    'Freeze Layer (FreezeColor)': '#E6991A',
+    'Scale Awareness (ScaleAwareness)': '#FAF2E6'
   },
   forest: {
-    'primary': '#33804D',
-    'secondary': '#4D9933',
-    'background': '#F2FAF2',
-    'text': '#1A331A'
+    'Alert (Alert)': '#33804D',
+    'Freeze Layer (FreezeColor)': '#4D9933',
+    'Scale Awareness (ScaleAwareness)': '#F2FAF2'
   }
 };
 
@@ -61,11 +57,11 @@ function hexToRgb(hex: string): RGB {  // Using Figma's RGB type instead of our 
 
 function getColorName(styleName: string): string {
   const parts = styleName.split('/');
-  return parts[parts.length - 1].toLowerCase();
+  return parts[parts.length - 1];
 }
 
 function getThemeColor(colorName: string, theme: ThemeColors): RGB | null {
-  const hexColor = theme[colorName.toLowerCase()];
+  const hexColor = theme[colorName];
   return hexColor ? hexToRgb(hexColor) : null;
 }
 
