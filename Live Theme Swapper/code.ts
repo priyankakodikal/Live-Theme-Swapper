@@ -1,45 +1,63 @@
 // code.ts
-interface RGB {
-  readonly r: number;
-  readonly g: number;
-  readonly b: number;
+interface ColorRGB {  // Changed from RGB to ColorRGB
+  r: number;
+  g: number;
+  b: number;
 }
 
 interface ThemeColors {
-  [key: string]: RGB;
+  [key: string]: string; // Hex values
 }
 
 interface Themes {
   [key: string]: ThemeColors;
 }
 
-// Define multiple themes
+// Define multiple themes using hex values
 const themes: Themes = {
   light: {
-    'primary': { r: 0.2, g: 0.4, b: 0.8 },
-    'secondary': { r: 0.6, g: 0.2, b: 0.7 },
-    'background': { r: 1, g: 1, b: 1 },
-    'text': { r: 0.1, g: 0.1, b: 0.1 }
+    'primary': '#3366CC',
+    'secondary': '#9933B3',
+    'background': '#FFFFFF',
+    'text': '#1A1A1A'
   },
   dark: {
-    'primary': { r: 0.4, g: 0.6, b: 1 },
-    'secondary': { r: 0.8, g: 0.4, b: 0.9 },
-    'background': { r: 0.1, g: 0.1, b: 0.1 },
-    'text': { r: 0.9, g: 0.9, b: 0.9 }
+    'primary': '#6699FF',
+    'secondary': '#CC66E6',
+    'background': '#1A1A1A',
+    'text': '#E6E6E6'
   },
   sunset: {
-    'primary': { r: 0.95, g: 0.4, b: 0.2 },
-    'secondary': { r: 0.9, g: 0.6, b: 0.1 },
-    'background': { r: 0.98, g: 0.95, b: 0.9 },
-    'text': { r: 0.3, g: 0.1, b: 0.1 }
+    'primary': '#F26633',
+    'secondary': '#E6991A',
+    'background': '#FAF2E6',
+    'text': '#4D1A1A'
   },
   forest: {
-    'primary': { r: 0.2, g: 0.5, b: 0.3 },
-    'secondary': { r: 0.3, g: 0.6, b: 0.2 },
-    'background': { r: 0.95, g: 0.98, b: 0.95 },
-    'text': { r: 0.1, g: 0.2, b: 0.1 }
+    'primary': '#33804D',
+    'secondary': '#4D9933',
+    'background': '#F2FAF2',
+    'text': '#1A331A'
   }
 };
+
+// Convert hex to RGB
+function hexToRgb(hex: string): RGB {  // Using Figma's RGB type instead of our custom one
+  // Remove the hash if present
+  hex = hex.replace(/^#/, '');
+
+  // Parse the hex values
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+
+  // Return RGB values normalized to 0-1 range
+  return {
+    r: r / 255,
+    g: g / 255,
+    b: b / 255
+  };
+}
 
 function getColorName(styleName: string): string {
   const parts = styleName.split('/');
@@ -47,58 +65,152 @@ function getColorName(styleName: string): string {
 }
 
 function getThemeColor(colorName: string, theme: ThemeColors): RGB | null {
-  return theme[colorName.toLowerCase()] || null;
+  const hexColor = theme[colorName.toLowerCase()];
+  return hexColor ? hexToRgb(hexColor) : null;
 }
 
-async function processNode(node: SceneNode, theme: ThemeColors): Promise<void> {
-  if ('fills' in node && node.fills) {
-    const fills = node.fills as Paint[];
-    fills.forEach((fill, index) => {
-      if (fill.type === 'SOLID' && node.fillStyleId) {
-        const style = figma.getStyleById(node.fillStyleId as string);
-        if (style) {
-          const colorName = getColorName(style.name);
-          const themeColor = getThemeColor(colorName, theme);
-          if (themeColor) {
-            const newFill: SolidPaint = {
-              ...fill,
-              color: themeColor
-            };
-            fills[index] = newFill;
+async function updateNodeColors(node: SceneNode, theme: ThemeColors): Promise<void> {
+  // Handle fills
+  if ('fills' in node) {
+    if (node.fills !== figma.mixed && node.fills) {
+      for (let i = 0; i < node.fills.length; i++) {
+        const fill = node.fills[i] as Paint;
+        if (fill.type === 'SOLID') {
+          const solidFill = fill as SolidPaint;
+          const fillStyle = node.fillStyleId;
+          if (typeof fillStyle === 'string') {
+            const style = await figma.getStyleByIdAsync(fillStyle);
+            if (style) {
+              const colorName = getColorName(style.name);
+              const themeColor = getThemeColor(colorName, theme);
+              if (themeColor) {
+                // Create a new fill with the theme color
+                const newFill: SolidPaint = {
+                  ...solidFill,
+                  color: themeColor
+                };
+                node.fills = node.fills.map((f, index) => 
+                  index === i ? newFill : f
+                );
+              }
+            }
           }
         }
       }
-    });
+    }
   }
 
-  if ('strokes' in node && node.strokes) {
-    const strokes = node.strokes as Paint[];
-    strokes.forEach((stroke, index) => {
-      if (stroke.type === 'SOLID' && node.strokeStyleId) {
-        const style = figma.getStyleById(node.strokeStyleId as string);
-        if (style) {
-          const colorName = getColorName(style.name);
-          const themeColor = getThemeColor(colorName, theme);
-          if (themeColor) {
-            const newStroke: SolidPaint = {
-              ...stroke,
-              color: themeColor
-            };
-            strokes[index] = newStroke;
+  // Handle strokes
+  if ('strokes' in node) {
+    if (Array.isArray(node.strokes) && node.strokes.length > 0) {
+      for (let i = 0; i < node.strokes.length; i++) {
+        const stroke = node.strokes[i];
+        if (stroke.type === 'SOLID') {
+          const strokeStyle = node.strokeStyleId;
+          if (typeof strokeStyle === 'string') {
+            const style = await figma.getStyleByIdAsync(strokeStyle);
+            if (style) {
+              const colorName = getColorName(style.name);
+              const themeColor = getThemeColor(colorName, theme);
+              if (themeColor) {
+                // Create a new stroke with the theme color
+                const newStroke = { ...stroke, color: themeColor };
+                node.strokes = node.strokes.map((s, index) => 
+                  index === i ? newStroke : s
+                );
+              }
+            }
           }
         }
       }
-    });
+    }
   }
 
+  // Handle background color for frames
+  // Handle background color for frames and rectangles
+if (node.type === 'FRAME' || node.type === 'RECTANGLE') {
+  if ('backgrounds' in node) { // For frames
+    const backgrounds = node.backgrounds;
+    if (backgrounds) {
+      for (let i = 0; i < backgrounds.length; i++) {
+        const background = backgrounds[i] as Paint;
+        if (background.type === 'SOLID') {
+          const solidBackground = background as SolidPaint;
+          if (node.type === 'FRAME' && node.backgroundStyleId) {
+            const style = await figma.getStyleByIdAsync(node.backgroundStyleId);
+            if (style) {
+              const colorName = getColorName(style.name);
+              const themeColor = getThemeColor(colorName, theme);
+              if (themeColor) {
+                const newBackground: SolidPaint = {
+                  ...solidBackground,
+                  color: themeColor
+                };
+                node.backgrounds = node.backgrounds.map((bg, index) =>
+                  index === i ? newBackground : bg
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  } else if ('fills' in node) { // For rectangles
+    if (node.fills !== figma.mixed && node.fills) {
+      for (let i = 0; i < node.fills.length; i++) {
+        const fill = node.fills[i] as Paint;
+        if (fill.type === 'SOLID') {
+          const solidFill = fill as SolidPaint;
+          if (node.fillStyleId && typeof node.fillStyleId === 'string') {
+            const style = await figma.getStyleByIdAsync(node.fillStyleId);
+            if (style) {
+              const colorName = getColorName(style.name);
+              const themeColor = getThemeColor(colorName, theme);
+              if (themeColor) {
+                const newFill: SolidPaint = {
+                  ...solidFill,
+                  color: themeColor
+                };
+                node.fills = node.fills.map((f, index) =>
+                  index === i ? newFill : f
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+  // Handle text color
+  if (node.type === 'TEXT') {
+    if (node.textStyleId && typeof node.textStyleId === 'string') {
+      const style = await figma.getStyleByIdAsync(node.textStyleId);
+      if (style) {
+        const colorName = getColorName(style.name);
+        const themeColor = getThemeColor(colorName, theme);
+        if (themeColor) {
+          node.fills = [{
+            type: 'SOLID',
+            color: themeColor
+          }];
+        }
+      }
+    }
+  }
+
+  // Process children recursively
   if ('children' in node) {
     for (const child of node.children) {
-      await processNode(child, theme);
+      await updateNodeColors(child, theme);
     }
   }
 }
 
 figma.showUI(__html__, { width: 300, height: 400 });
+
+// The relevant part that needs to change is in the error handling section. Here's the corrected version:
 
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'apply-theme') {
@@ -120,13 +232,20 @@ figma.ui.onmessage = async (msg) => {
         if (node.type === 'FRAME') {
           const clonedFrame = node.clone();
           clonedFrame.x = node.x + node.width + 100;
-          await processNode(clonedFrame, selectedTheme);
+          await updateNodeColors(clonedFrame, selectedTheme);
           figma.currentPage.selection = [clonedFrame];
         }
       }
       figma.notify(`${msg.themeName} theme applied successfully!`);
-    } catch (error) {
-      figma.notify('Error applying theme: ' + (error as Error).message);
+    } catch (err) {
+      // Type guard to check if the error is an Error object
+      if (err instanceof Error) {
+        console.error('Error:', err);
+        figma.notify('Error applying theme: ' + err.message);
+      } else {
+        console.error('Unknown error:', err);
+        figma.notify('An unknown error occurred while applying the theme');
+      }
     }
   }
 };
