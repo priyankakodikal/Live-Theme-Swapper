@@ -3,9 +3,10 @@
 <head>
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Ableton Sans", sans-serif;
       margin: 0;
       padding: 16px;
+      background: rgb(238, 238, 238);
     }
 
     .container {
@@ -18,6 +19,7 @@
       margin: 0;
       font-size: 16px;
       font-weight: 600;
+      font-family: "Ableton Sans", sans-serif;
     }
 
     .description {
@@ -45,8 +47,8 @@
     }
 
     .theme-button:hover {
-      border-color: #18A0FB;
-      background: #F5F9FF;
+      border-color: #003cff;
+      background: #f7f7ff;
     }
 
     .color-preview {
@@ -70,13 +72,15 @@
 <body>
   <div class="container">
     <h2>Ableton Live Theme Swapper</h2>
-    <p class="description">Select a frame and choose a theme to create a themed copy.</p>
+    <p class="description">Select a frame and choose a theme to create a themed copy:</p>
+    <hr style="border: none; border-top: 2px solid #747474;"/>
     
     <div class="themes-grid">
       <button class="theme-button" onclick="applyTheme('Light')">
         <div class="color-preview">
           <div class="color-dot" style="background-color: #A5A5A5"></div>
           <div class="color-dot" style="background-color: #4F4F4F"></div>
+          <div class="color-dot" style="background-color: #FFB901"></div>
         </div>
         <span class="theme-name">Light</span>
       </button>
@@ -85,6 +89,7 @@
         <div class="color-preview">
           <div class="color-dot" style="background-color: #363636"></div>
           <div class="color-dot" style="background-color: #757575"></div>
+          <div class="color-dot" style="background-color: #ffad56"></div>
         </div>
         <span class="theme-name">Dark</span>
       </button>
@@ -93,6 +98,7 @@
         <div class="color-preview">
           <div class="color-dot" style="background-color: #372c6d"></div>
           <div class="color-dot" style="background-color: #acbad3"></div>
+          <div class="color-dot" style="background-color: #b5ff63"></div>
         </div>
         <span class="theme-name">Angst Robot</span>
       </button>
@@ -101,6 +107,7 @@
         <div class="color-preview">
           <div class="color-dot" style="background-color: #2f3138"></div>
           <div class="color-dot" style="background-color: #7d8088"></div>
+          <div class="color-dot" style="background-color: #ff91c3"></div>
         </div>
         <span class="theme-name">Immaterial</span>
       </button>
@@ -109,6 +116,7 @@
         <div class="color-preview">
           <div class="color-dot" style="background-color: #26383f"></div>
           <div class="color-dot" style="background-color: #82918f"></div>
+          <div class="color-dot" style="background-color: #ffc658"></div>
         </div>
         <span class="theme-name">Riparian</span>
       </button>
@@ -117,6 +125,7 @@
         <div class="color-preview">
           <div class="color-dot" style="background-color: #343434"></div>
           <div class="color-dot" style="background-color: #8c7f6c"></div>
+          <div class="color-dot" style="background-color: #ffad56"></div>
         </div>
         <span class="theme-name">Twenty Four Carat</span>
       </button>
