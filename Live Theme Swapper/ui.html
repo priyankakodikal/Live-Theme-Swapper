@@ -132,6 +132,31 @@
         }
       }, '*');
     }
+
+    window.onmessage = async (event) => {
+      if (event.data.pluginMessage.type === 'progress') {
+        const { value, currentStep, totalSteps, status } = event.data.pluginMessage;
+        
+        // Update progress bar value
+        const progressBar = document.getElementById('progress-bar');
+        if (progressBar) {
+          progressBar.value = value;
+          progressBar.textContent = `${value}%`;
+        }
+        
+        // Update status text if you have it
+        const statusText = document.getElementById('status-text');
+        if (statusText) {
+          if (status === 'error') {
+            statusText.textContent = `Error: ${event.data.pluginMessage.error}`;
+          } else if (status === 'complete') {
+            statusText.textContent = 'Theme applied successfully!';
+          } else {
+            statusText.textContent = `Processing frame ${currentStep} of ${totalSteps}`;
+          }
+        }
+      }
+    };
   </script>
 </body>
 </html>

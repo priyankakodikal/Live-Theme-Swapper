@@ -296,36 +296,59 @@ figma.ui.onmessage = async (msg) => {
       figma.notify('Please select a frame to apply the theme');
       return;
     }
-
+    
     if (!selectedTheme) {
       figma.notify('Invalid theme selected');
       return;
     }
-
+    
     try {
+      // Initialize progress tracking
       let progress = 0;
-      const totalNodes = selectedNodes.length;
-      figma.ui.postMessage({ type: 'progress', progress });
-
+      let progressNotification = figma.notify(`🎨 Applying ${msg.themeName} Theme: ▓░░░░░░░░░ ${progress}%`, { timeout: 1000 });
+      
+      const totalSteps = selectedNodes.length;
+      
       for (const [index, node] of selectedNodes.entries()) {
         if (node.type === 'FRAME') {
+          // Clone and position the frame
           const clonedFrame = node.clone();
           clonedFrame.x = node.x + node.width + 100;
+          
+          // Update colors
           await updateNodeColors(clonedFrame, selectedTheme);
           figma.currentPage.selection = [clonedFrame];
+          
+          // Calculate progress
+          progress = Math.round(((index + 1) / totalSteps) * 100);
+          
+          // Create progress bar visual using blocks
+          const totalBlocks = 10;
+          const filledBlocks = Math.round((progress / 100) * totalBlocks);
+          const progressBar = '▓'.repeat(filledBlocks) + '░'.repeat(totalBlocks - filledBlocks);
+          
+          // Close previous notification and create new one with visual progress bar
+          progressNotification.cancel();
+          progressNotification = figma.notify(
+            `🎨 Applying ${msg.themeName} Theme: ${progressBar} ${progress}% (${index + 1}/${totalSteps} Frames)`, 
+            { timeout: 1000 }
+          );
         }
-        progress = Math.round(((index + 1) / totalNodes) * 100);
-        figma.ui.postMessage({ type: 'progress', progress });
+        
+        // Add a small delay to make the progress visible
+        await new Promise(resolve => setTimeout(resolve, 150));
       }
-
-      figma.notify(`${msg.themeName} theme applied successfully!`);
+      
+      // Show completion
+      progressNotification.cancel();
+      figma.notify(`✨ ${msg.themeName} theme applied successfully to ${totalSteps} frames!`, { timeout: 2000 });
     } catch (err) {
       if (err instanceof Error) {
         console.error('Error:', err);
-        figma.notify('Error applying theme: ' + err.message);
+        figma.notify('❌ Error applying theme: ' + err.message);
       } else {
         console.error('Unknown error:', err);
-        figma.notify('An unknown error occurred while applying the theme');
+        figma.notify('❌ An unknown error occurred while applying the theme');
       }
     }
   }
