@@ -9,39 +9,55 @@ interface ThemeColors {
   [key: string]: string; // Hex values
 }
 
-interface State {
-  [key: string]: ThemeColors;
-}
-
 interface Text {
   [key: string]: ThemeColors;
 }
 
+interface Control {
+  [key: string]: ThemeColors;
+}
+
+interface Tree {
+  [key: string]: ThemeColors;
+}
+
+interface Surface {
+  [key: string]: ThemeColors;
+}
+
 // Define multiple themes using hex values
-const themes: State & Text = {
-  light: {
-    'Alert (Alert)': '#3366CC',
-    'Freeze Layer (FreezeColor)': '#9933B3',
-    'Scale Awareness (ScaleAwareness)': '#FFFFFF',
-    'View Text (ControlForeground)': '#6699FF'
+const themes: Text & Control & Tree & Surface = {
+  Light: {
+    'View Foreground (SurfaceBackground)': '#A5A5A5',
+    'Tree column for category foreground (TreeRowCategoryForeground)': '#4F4F4F',
+    'View Text (ControlForeground)': '#121212'
   },
-  dark: {
-    'Alert (Alert)': '#6699FF',
-    'Freeze Layer (FreezeColor)': '#CC66E6',
-    'Scale Awareness (ScaleAwareness)': '#1A1A1A',
-    'View Text (ControlForeground)': '#9933B3'
+  Dark: {
+    'View Foreground (SurfaceBackground)': '#363636',
+    'Tree column for category foreground (TreeRowCategoryForeground)': '#757575',
+    'View Text (ControlForeground)': '#b5b5b5'
   },
-  sunset: {
-    'Alert (Alert)': '#F26633',
-    'Freeze Layer (FreezeColor)': '#E6991A',
-    'Scale Awareness (ScaleAwareness)': '#FAF2E6',
-    'View Text (ControlForeground)': '#4D9933'
+  AngstRobot: {
+    'View Foreground (SurfaceBackground)': '#372c6d',
+    'Tree column for category foreground (TreeRowCategoryForeground)': '#acbad3',
+    'View Text (ControlForeground)': '#e5e6e8'
   },
-  forest: {
-    'Alert (Alert)': '#33804D',
-    'Freeze Layer (FreezeColor)': '#4D9933',
-    'Scale Awareness (ScaleAwareness)': '#E6991A'
+  Immaterial: {
+    'View Foreground (SurfaceBackground)': '#2f3138',
+    'Tree column for category foreground (TreeRowCategoryForeground)': '#7d8088',
+    'View Text (ControlForeground)': '#cbcbcd'
   },
+  Riparian: {
+    'View Foreground (SurfaceBackground)': '#26383f',
+    'Tree column for category foreground (TreeRowCategoryForeground)': '#82918f',
+    'View Text (ControlForeground)': '#d6cda8'
+  },
+  TwentyFourCarat: {
+    'View Foreground (SurfaceBackground)': '#343434',
+    'Tree column for category foreground (TreeRowCategoryForeground)': '#8c7f6c',
+    'View Text (ControlForeground)': '#e1c69c'
+  }
+
 };
 
 // Convert hex to RGB
