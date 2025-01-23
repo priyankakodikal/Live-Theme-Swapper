@@ -46,6 +46,7 @@ const themes: Text & Control & Tree & Surface & Theme = {
     'Control Contrast Frame (ControlContrastFrame)': '#4F4F4F',
     'Control Fill Button (ControlBackground)': '#CFCFCF',
     'Selection/Selection Background (SelectionBackground)': '#CDF8FF',
+    'Selection/Selection Foreground(SelectionForeground)': '#121212',
     'Primary': '#FFB901'
   },
   Dark: {
@@ -59,6 +60,7 @@ const themes: Text & Control & Tree & Surface & Theme = {
     'Control Contrast Frame (ControlContrastFrame)': '#111111',
     'Control Fill Button (ControlBackground)': '#1e1e1e',
     'Selection/Selection Background (SelectionBackground)': '#b0ddeb',
+    'Selection/Selection Foreground(SelectionForeground)': '#121212',
     'Primary': '#ffad56'
   },
   AngstRobot: {
@@ -72,6 +74,7 @@ const themes: Text & Control & Tree & Surface & Theme = {
     'Control Contrast Frame (ControlContrastFrame)': '#060313',
     'Control Fill Button (ControlBackground)': '#1a1037',
     'Selection/Selection Background (SelectionBackground)': '#79c9ff',
+    'Selection/Selection Foreground(SelectionForeground)': '#121212',
     'Primary': '#b5ff63'
   },
   Immaterial: {
@@ -85,6 +88,7 @@ const themes: Text & Control & Tree & Surface & Theme = {
     'Control Contrast Frame (ControlContrastFrame)': '#0c0d10',
     'Control Fill Button (ControlBackground)': '#18191e',
     'Selection/Selection Background (SelectionBackground)': '#bbdbe3',
+    'Selection/Selection Foreground(SelectionForeground)': '#121212',
     'Primary': '#ff91c3'
   },
   Riparian: {
@@ -98,6 +102,7 @@ const themes: Text & Control & Tree & Surface & Theme = {
     'Control Contrast Frame (ControlContrastFrame)': '#000a0f',
     'Control Fill Button (ControlBackground)': '#08191f',
     'Selection/Selection Background (SelectionBackground)': '#b4eccd',
+    'Selection/Selection Foreground(SelectionForeground)': '#121212',
     'Primary': '#ffc658'
   },
   TwentyFourCarat: {
@@ -111,6 +116,7 @@ const themes: Text & Control & Tree & Surface & Theme = {
     'Control Contrast Frame (ControlContrastFrame)': '#0d0d0d',
     'Control Fill Button (ControlBackground)': '#1b1b1b',
     'Selection/Selection Background (SelectionBackground)': '#ffdd9f',
+    'Selection/Selection Foreground(SelectionForeground)': '#121212',
     'Primary': '#ffad56'
   }
 
