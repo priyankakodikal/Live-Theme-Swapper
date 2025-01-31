@@ -1,3 +1,10 @@
+import Light from '../themes/Default Light Neutral Medium';
+import Dark from '../themes/Default Dark Neutral Medium';
+import angstRobot from '../themes/Angst Robot';
+import {ImmaterialTheme} from '../themes/Immaterial';
+import {RiparianTheme} from '../themes/Riparian';
+import {TwentyFourCaratTheme} from '../themes/Twenty-Four Carat';
+
 // code.ts
 interface ColorRGB {  // Changed from RGB to ColorRGB
   r: number;
@@ -8,118 +15,18 @@ interface ColorRGB {  // Changed from RGB to ColorRGB
 interface ThemeColors {
   [key: string]: string; // Hex values
 }
-
-interface Text {
-  [key: string]: ThemeColors;
-}
-
-interface Control {
-  [key: string]: ThemeColors;
-}
-
-interface Tree {
-  [key: string]: ThemeColors;
-}
-
-interface Surface {
-  [key: string]: ThemeColors;
-}
-
 interface Theme {
   [key: string]: ThemeColors;
 }
 
-interface State {
-  [key: string]: ThemeColors;
-}
-
 // Define multiple themes using hex values
-const themes: Text & Control & Tree & Surface & Theme = {
-  Light: {
-    'View Foreground (SurfaceBackground)': '#A5A5A5',
-    'View Background (SurfaceArea)': '#6E6E6E',
-    'Tree column for category foreground (TreeRowCategoryForeground)': '#4F4F4F',
-    'View Text (ControlForeground)': '#121212',
-    'Control Text-Icon On (ControlOnForeground)': '#121212',
-    'Control Text-Icon Off Disabled (ControlOffDisabledForeground)': '#121212',
-    'Control Text-Icon Off (ControlOffForeground)': '#121212',
-    'Control Contrast Frame (ControlContrastFrame)': '#4F4F4F',
-    'Control Fill Button (ControlBackground)': '#CFCFCF',
-    'Selection/Selection Background (SelectionBackground)': '#CDF8FF',
-    'Selection/Selection Foreground(SelectionForeground)': '#121212',
-    'Primary': '#FFB901'
-  },
-  Dark: {
-    'View Foreground (SurfaceBackground)': '#363636',
-    'View Background (SurfaceArea)': '#242424',
-    'Tree column for category foreground (TreeRowCategoryForeground)': '#757575',
-    'View Text (ControlForeground)': '#b5b5b5',
-    'Control Text-Icon On (ControlOnForeground)': '#070707',
-    'Control Text-Icon Off Disabled (ControlOffDisabledForeground)': '#696969',
-    'Control Text-Icon Off (ControlOffForeground)': '#b5b5b5',
-    'Control Contrast Frame (ControlContrastFrame)': '#111111',
-    'Control Fill Button (ControlBackground)': '#1e1e1e',
-    'Selection/Selection Background (SelectionBackground)': '#b0ddeb',
-    'Selection/Selection Foreground(SelectionForeground)': '#121212',
-    'Primary': '#ffad56'
-  },
-  AngstRobot: {
-    'View Foreground (SurfaceBackground)': '#372c6d',
-    'View Background (SurfaceArea)': '#221746',
-    'Tree column for category foreground (TreeRowCategoryForeground)': '#acbad3',
-    'View Text (ControlForeground)': '#e5e6e8',
-    'Control Text-Icon On (ControlOnForeground)': '#000001',
-    'Control Text-Icon Off Disabled (ControlOffDisabledForeground)': '#859cc9',
-    'Control Text-Icon Off (ControlOffForeground)': '#e5e6e8',
-    'Control Contrast Frame (ControlContrastFrame)': '#060313',
-    'Control Fill Button (ControlBackground)': '#1a1037',
-    'Selection/Selection Background (SelectionBackground)': '#79c9ff',
-    'Selection/Selection Foreground(SelectionForeground)': '#121212',
-    'Primary': '#b5ff63'
-  },
-  Immaterial: {
-    'View Foreground (SurfaceBackground)': '#2f3138',
-    'View Background (SurfaceArea)': '#1d1f23',
-    'Tree column for category foreground (TreeRowCategoryForeground)': '#7d8088',
-    'View Text (ControlForeground)': '#cbcbcd',
-    'Control Text-Icon On (ControlOnForeground)': '#040506',
-    'Control Text-Icon Off Disabled (ControlOffDisabledForeground)': '#6d7079',
-    'Control Text-Icon Off (ControlOffForeground)': '#cbcbcd',
-    'Control Contrast Frame (ControlContrastFrame)': '#0c0d10',
-    'Control Fill Button (ControlBackground)': '#18191e',
-    'Selection/Selection Background (SelectionBackground)': '#bbdbe3',
-    'Selection/Selection Foreground(SelectionForeground)': '#121212',
-    'Primary': '#ff91c3'
-  },
-  Riparian: {
-    'View Foreground (SurfaceBackground)': '#26383f',
-    'View Background (SurfaceArea)': '#0f2026',
-    'Tree column for category foreground (TreeRowCategoryForeground)': '#82918f',
-    'View Text (ControlForeground)': '#d6cda8',
-    'Control Text-Icon On (ControlOnForeground)': '#000102',
-    'Control Text-Icon Off Disabled (ControlOffDisabledForeground)': '#728283',
-    'Control Text-Icon Off (ControlOffForeground)': '#d6cda8',
-    'Control Contrast Frame (ControlContrastFrame)': '#000a0f',
-    'Control Fill Button (ControlBackground)': '#08191f',
-    'Selection/Selection Background (SelectionBackground)': '#b4eccd',
-    'Selection/Selection Foreground(SelectionForeground)': '#121212',
-    'Primary': '#ffc658'
-  },
-  TwentyFourCarat: {
-    'View Foreground (SurfaceBackground)': '#343434',
-    'View Background (SurfaceArea)': '#222222',
-    'Tree column for category foreground (TreeRowCategoryForeground)': '#8c7f6c',
-    'View Text (ControlForeground)': '#e1c69c',
-    'Control Text-Icon On (ControlOnForeground)': '#040404',
-    'Control Text-Icon Off Disabled (ControlOffDisabledForeground)': '#726c63',
-    'Control Text-Icon Off (ControlOffForeground)': '#e1c69c',
-    'Control Contrast Frame (ControlContrastFrame)': '#0d0d0d',
-    'Control Fill Button (ControlBackground)': '#1b1b1b',
-    'Selection/Selection Background (SelectionBackground)': '#ffdd9f',
-    'Selection/Selection Foreground(SelectionForeground)': '#121212',
-    'Primary': '#ffad56'
-  }
-
+const themes: Theme = {
+  Light: Light,
+  Dark: Dark,
+  AngstRobot: angstRobot,
+  // Immaterial: ImmaterialTheme,
+  // Riparian: RiparianTheme,
+  // TwentyFourCarat: TwentyFourCaratTheme
 };
 
 // Convert hex to RGB
@@ -141,8 +48,8 @@ function hexToRgb(hex: string): RGB {  // Using Figma's RGB type instead of our 
 }
 
 function getColorName(styleName: string): string {
-  const parts = styleName.split('/');
-  return parts[parts.length - 1];
+  const match = styleName.match(/\(([^)]+)\)/);
+  return match ? match[1] : styleName;
 }
 
 function getThemeColor(colorName: string, theme: ThemeColors): RGB | null {
