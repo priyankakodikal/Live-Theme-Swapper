@@ -24,9 +24,9 @@ const themes: Theme = {
   Light: Light,
   Dark: Dark,
   AngstRobot: angstRobot,
-  // Immaterial: ImmaterialTheme,
-  // Riparian: RiparianTheme,
-  // TwentyFourCarat: TwentyFourCaratTheme
+  Immaterial: immaterial,
+  Riparian: riparian,
+  TwentyFourCarat: twentyFourCarat
 };
 
 // Convert hex to RGB
