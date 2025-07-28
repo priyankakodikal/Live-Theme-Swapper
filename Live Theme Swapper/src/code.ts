@@ -1,9 +1,9 @@
 import Light from '../themes/Default Light Neutral Medium';
 import Dark from '../themes/Default Dark Neutral Medium';
 import angstRobot from '../themes/Angst Robot';
-import {ImmaterialTheme} from '../themes/Immaterial';
-import {RiparianTheme} from '../themes/Riparian';
-import {TwentyFourCaratTheme} from '../themes/Twenty-Four Carat';
+import immaterial from '../themes/Immaterial';
+import riparian from '../themes/Riparian';
+import twentyFourCarat from '../themes/Twenty-Four Carat';
 
 // code.ts
 interface ColorRGB {  // Changed from RGB to ColorRGB
